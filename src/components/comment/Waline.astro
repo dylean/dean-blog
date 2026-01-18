@@ -1,0 +1,79 @@
+---
+import { walineConfig } from "../../config";
+
+interface Props {
+	path?: string;
+}
+
+const { path = Astro.url.pathname } = Astro.props;
+---
+
+{walineConfig.enable && (
+  <div class="waline-wrapper">
+    <div id="waline"></div>
+  </div>
+)}
+
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+
+<script is:inline define:vars={{ serverURL: walineConfig.serverURL, path, lang: walineConfig.lang, emoji: walineConfig.emoji, pageview: walineConfig.pageview, enable: walineConfig.enable }}>
+  if (enable) {
+    const initWaline = () => {
+      // Load Waline from CDN if not already loaded
+      const loadWaline = async () => {
+        const { init } = await import('https://unpkg.com/@waline/client@v3/dist/waline.js');
+        
+        // Destroy existing instance if any
+        const existingContainer = document.getElementById("waline");
+        if (existingContainer) {
+          existingContainer.innerHTML = "";
+        }
+        
+        init({
+          el: "#waline",
+          serverURL: serverURL,
+          path: path,
+          pageview: pageview,
+          lang: lang || "en",
+          emoji: emoji || [],
+          dark: 'html.dark',
+          meta: ["nick", "mail", "link"],
+          requiredMeta: ["nick"],
+          login: "enable",
+          wordLimit: 500,
+          pageSize: 10,
+          reaction: true,
+        });
+      };
+
+      loadWaline().catch(err => console.error('Failed to initialize Waline:', err));
+    };
+
+    // Initialize on page load
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initWaline);
+    } else {
+      initWaline();
+    }
+
+    // Re-initialize on Swup page change
+    document.addEventListener("swup:contentReplaced", () => {
+      initWaline();
+    });
+  }
+</script>
+
+<style>
+  .waline-wrapper {
+    --waline-theme-color: var(--primary);
+    --waline-active-color: var(--primary);
+  }
+  
+  :global(.wl-panel) {
+    border-radius: 0.75rem;
+  }
+  
+  :global(.wl-cards .wl-item) {
+    padding: 1rem;
+  }
+</style>

@@ -100,3 +100,11 @@ export type BlogPostData = {
 export type ExpressiveCodeConfig = {
 	theme: string;
 };
+
+export type WalineConfig = {
+	enable: boolean;
+	serverURL: string;
+	pageview?: boolean;
+	emoji?: string[];
+	lang?: string;
+};
