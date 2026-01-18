@@ -8,9 +8,9 @@ import type {
 import { LinkPreset } from "./types/config";
 
 export const siteConfig: SiteConfig = {
-	title: "Dean's 数字花园",
-	subtitle: "记录学习与成长",
-	lang: "zh_CN", // Language code, e.g. 'en', 'zh_CN', 'ja', etc.
+	title: "Dean's Digital Garden",
+	subtitle: "Documenting Learning & Growth",
+	lang: "en", // Language code, e.g. 'en', 'zh_CN', 'ja', etc.
 	themeColor: {
 		hue: 250, // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
 		fixed: false, // Hide the theme color picker for visitors
@@ -55,7 +55,7 @@ export const navBarConfig: NavBarConfig = {
 export const profileConfig: ProfileConfig = {
 	avatar: "assets/images/demo-avatar.png", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
 	name: "Dean",
-	bio: "Web3 开发者 | 终身学习者",
+	bio: "Web3 Developer | Lifelong Learner",
 	links: [
 		{
 			name: "Twitter",
