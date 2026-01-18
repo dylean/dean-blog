@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { getPostUrlBySlug } from "@utils/url-utils";
+import { walineConfig } from "../config";
 import PostCard from "./PostCard.astro";
 
 const { page } = Astro.props;
@@ -26,3 +27,31 @@ const interval = 50;
         ></PostCard>
     ))}
 </div>
+
+{walineConfig.enable && walineConfig.pageview && (
+<script is:inline define:vars={{ serverURL: walineConfig.serverURL }}>
+  const initPageviewCounts = async () => {
+    try {
+      const { pageviewCount } = await import('https://unpkg.com/@waline/client@v3/dist/pageview.js');
+      pageviewCount({
+        serverURL: serverURL,
+        update: false, // Don't increment count on list page views
+      });
+    } catch (err) {
+      console.error('Failed to load pageview counts:', err);
+    }
+  };
+
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPageviewCounts);
+  } else {
+    initPageviewCounts();
+  }
+
+  // Re-initialize on Swup page change
+  document.addEventListener("swup:contentReplaced", () => {
+    initPageviewCounts();
+  });
+</script>
+)}
